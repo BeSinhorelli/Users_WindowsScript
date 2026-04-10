@@ -26,7 +26,7 @@ Script em PowerShell para gerenciamento de usuários e monitoramento de processo
 
 ## 📷 Tela do Sistema
 
-<img width="569" height="553" alt="Tela do Sistema de Gerenciamento" src="https://github.com/user-attachments/assets/87f59c9e-aacb-47c6-bc74-83bf538f9122" />
+<p align="center"><img width="569" height="553" alt="Tela do Sistema de Gerenciamento" src="https://github.com/user-attachments/assets/87f59c9e-aacb-47c6-bc74-83bf538f9122" /></p>
 
 ### Utilitários
 - 📁 Criação de arquivos de teste em massa
