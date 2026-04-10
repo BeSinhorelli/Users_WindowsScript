@@ -1,10 +1,10 @@
 # ============================================================
-# SCRIPT DE GERENCIAMENTO DE USUÁRIOS - WINDOWS
+# SCRIPT DE GERENCIAMENTO DE USUARIOS - WINDOWS
 # Autor: Bernardo
-# Versão: 7.0 - Com Monitoramento de Processos
+# Versao: 7.0 - Com Monitoramento de Processos
 # ============================================================
 
-# ========== CONFIGURAÇÕES ==========
+# ========== CONFIGURACOES ==========
 $VERDE = "Green"
 $VERMELHO = "Red"
 $AMARELO = "Yellow"
@@ -12,14 +12,13 @@ $AZUL = "Cyan"
 $ROXO = "Magenta"
 $CIANO = "Cyan"
 
-# Arquivo para armazenar usuários (simulação local)
+# Arquivo para armazenar usuarios (simulacao local)
 $USERS_FILE = "$env:USERPROFILE\.script_usuarios.txt"
 $LOG_FILE = "$env:USERPROFILE\.script_windows_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
 
-# ========== INICIALIZAR ARQUIVO DE USUÁRIOS ==========
+# ========== INICIALIZAR ARQUIVO DE USUARIOS ==========
 function Inicializar-Arquivo {
     if (-not (Test-Path $USERS_FILE)) {
-        # Criar arquivo com usuários de exemplo
         $conteudo = @"
 joao:Joao Silva:/bin/bash:ativo
 maria:Maria Santos:/bin/bash:ativo
@@ -27,49 +26,49 @@ carlos:Carlos Alberto:/bin/bash:ativo
 ana:Ana Paula:/bin/bash:ativo
 pedro:Pedro Lima:/bin/bash:ativo
 "@
-        Set-Content -Path $USERS_FILE -Value $conteudo
-        Write-Host "Arquivo de usuários criado: $USERS_FILE"
+        Set-Content -Path $USERS_FILE -Value $conteudo -Encoding UTF8
+        Write-Host "Arquivo de usuarios criado: $USERS_FILE"
     }
 }
 
-# ========== FUNÇÃO PARA LOG ==========
+# ========== FUNCAO PARA LOG ==========
 function Write-Log {
     param($tipo, $msg)
     "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - [$tipo] - $msg" | Out-File -FilePath $LOG_FILE -Append
 }
 
-# ========== FUNÇÃO PARA MOSTRAR MENSAGENS ==========
+# ========== FUNCAO PARA MOSTRAR MENSAGENS ==========
 function Write-Mensagem {
     param($tipo, $texto)
     
     switch ($tipo) {
-        "ERRO" { Write-Host "❌ $texto" -ForegroundColor Red }
-        "SUCESSO" { Write-Host "✅ $texto" -ForegroundColor Green }
-        "AVISO" { Write-Host "⚠️  $texto" -ForegroundColor Yellow }
-        "INFO" { Write-Host "ℹ️  $texto" -ForegroundColor Cyan }
+        "ERRO" { Write-Host "ERRO: $texto" -ForegroundColor Red }
+        "SUCESSO" { Write-Host "SUCESSO: $texto" -ForegroundColor Green }
+        "AVISO" { Write-Host "AVISO: $texto" -ForegroundColor Yellow }
+        "INFO" { Write-Host "INFO: $texto" -ForegroundColor Cyan }
         "TITULO" { Write-Host "$texto" -ForegroundColor Cyan }
     }
     Write-Log -tipo $tipo -msg $texto
 }
 
-# ========== FUNÇÃO PARA MONITORAR PROCESSOS ==========
+# ========== FUNCAO PARA MONITORAR PROCESSOS ==========
 function Monitorar-Processos {
     Clear-Host
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host "                 MONITORAMENTO DE PROCESSOS                " -ForegroundColor Green
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
     
-    Write-Host "📌 O que você quer monitorar?" -ForegroundColor Cyan
+    Write-Host "O que voce quer monitorar?" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "   1. 🔍 Monitorar um processo específico (por nome)"
-    Write-Host "   2. 📊 Ver todos os processos do sistema"
-    Write-Host "   3. 👤 Ver processos de um usuário específico"
-    Write-Host "   4. 💻 Ver processos mais pesados (CPU/Memória)"
-    Write-Host "   5. 🔄 Monitorar processo em tempo real (top)"
-    Write-Host "   6. ⏱️  Monitorar processo por tempo (ex: 10 segundos)"
-    Write-Host "   7. 📋 Ver processos de um usuário do script"
-    Write-Host "   8. 🔙 Voltar"
+    Write-Host "   1. Monitorar um processo especifico (por nome)"
+    Write-Host "   2. Ver todos os processos do sistema"
+    Write-Host "   3. Ver processos de um usuario especifico"
+    Write-Host "   4. Ver processos mais pesados (CPU/Memoria)"
+    Write-Host "   5. Monitorar processo em tempo real (top)"
+    Write-Host "   6. Monitorar processo por tempo (ex: 10 segundos)"
+    Write-Host "   7. Ver processos de um usuario do script"
+    Write-Host "   8. Voltar"
     Write-Host ""
     
     $opcao_proc = Read-Host "Escolha (1-8)"
@@ -78,45 +77,44 @@ function Monitorar-Processos {
         "1" {
             $processo = Read-Host "Digite o nome do processo (ex: powershell, chrome, notepad)"
             Write-Host ""
-            Write-Host "🔍 Processos encontrados para '$processo':" -ForegroundColor Cyan
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "Processos encontrados para '$processo':" -ForegroundColor Cyan
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
             Get-Process -Name "*$processo*" -ErrorAction SilentlyContinue | Format-Table -AutoSize
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
         }
         "2" {
             Write-Host ""
-            Write-Host "📊 TODOS OS PROCESSOS DO SISTEMA:" -ForegroundColor Cyan
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "TODOS OS PROCESSOS DO SISTEMA:" -ForegroundColor Cyan
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
             Get-Process | Select-Object -First 20 | Format-Table -AutoSize
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
             Write-Host "Total de processos: $( (Get-Process).Count )" -ForegroundColor Cyan
         }
         "3" {
-            $usuario_proc = Read-Host "Digite o nome do usuário"
+            $usuario_proc = Read-Host "Digite o nome do usuario"
             Write-Host ""
-            Write-Host "👤 Processos do usuário '$usuario_proc':" -ForegroundColor Cyan
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "Processos do usuario '$usuario_proc':" -ForegroundColor Cyan
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
             Get-Process -IncludeUserName | Where-Object { $_.UserName -like "*$usuario_proc*" } | Format-Table -AutoSize
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
         }
         "4" {
             Write-Host ""
-            Write-Host "💻 TOP 10 PROCESSOS MAIS PESADOS (CPU):" -ForegroundColor Cyan
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "TOP 10 PROCESSOS MAIS PESADOS (CPU):" -ForegroundColor Cyan
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
             Get-Process | Sort-Object CPU -Descending | Select-Object -First 10 | Format-Table -AutoSize
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
             Write-Host ""
-            Write-Host "💾 TOP 10 PROCESSOS MAIS PESADOS (MEMÓRIA):" -ForegroundColor Cyan
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "TOP 10 PROCESSOS MAIS PESADOS (MEMORIA):" -ForegroundColor Cyan
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
             Get-Process | Sort-Object WorkingSet -Descending | Select-Object -First 10 | Format-Table -AutoSize
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
         }
         "5" {
             Write-Host ""
-            Write-Host "🔄 Abrindo monitor em tempo real..." -ForegroundColor Cyan
+            Write-Host "Abrindo monitor em tempo real..." -ForegroundColor Cyan
             Write-Host "Pressione 'Ctrl+C' para sair do monitor" -ForegroundColor Yellow
             Start-Sleep -Seconds 2
-            # Usando PowerShell equivalente ao top
             while ($true) {
                 Clear-Host
                 Get-Process | Sort-Object CPU -Descending | Select-Object -First 20 | Format-Table -AutoSize
@@ -129,20 +127,20 @@ function Monitorar-Processos {
             Write-Host ""
             
             if (-not ($tempo_mon -match '^\d+$')) {
-                Write-Mensagem -tipo "ERRO" -texto "Tempo inválido! Usando 10 segundos"
+                Write-Mensagem -tipo "ERRO" -texto "Tempo invalido! Usando 10 segundos"
                 $tempo_mon = 10
             }
             
-            Write-Host "⏱️  Monitorando '$processo_mon' por $tempo_mon segundos..." -ForegroundColor Cyan
+            Write-Host "Monitorando '$processo_mon' por $tempo_mon segundos..." -ForegroundColor Cyan
             Write-Host ""
             
             $encontrado = $false
             for ($i = 1; $i -le $tempo_mon; $i++) {
                 if (Get-Process -Name "*$processo_mon*" -ErrorAction SilentlyContinue) {
-                    Write-Host "✅ [$i/$tempo_mon] Processo '$processo_mon' está em execução!" -ForegroundColor Green
+                    Write-Host "[$i/$tempo_mon] Processo '$processo_mon' esta em execucao!" -ForegroundColor Green
                     $encontrado = $true
                 } else {
-                    Write-Host "⏳ [$i/$tempo_mon] Aguardando processo '$processo_mon'..." -ForegroundColor Yellow
+                    Write-Host "[$i/$tempo_mon] Aguardando processo '$processo_mon'..." -ForegroundColor Yellow
                 }
                 Start-Sleep -Seconds 1
             }
@@ -150,13 +148,13 @@ function Monitorar-Processos {
             if ($encontrado) {
                 Write-Mensagem -tipo "SUCESSO" -texto "Processo monitorado com sucesso"
             } else {
-                Write-Mensagem -tipo "AVISO" -texto "Processo não encontrado durante o monitoramento"
+                Write-Mensagem -tipo "AVISO" -texto "Processo nao encontrado durante o monitoramento"
             }
         }
         "7" {
             Write-Host ""
-            Write-Host "📋 Usuários cadastrados no script:" -ForegroundColor Cyan
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "Usuarios cadastrados no script:" -ForegroundColor Cyan
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
             
             $usuarios = Get-Content $USERS_FILE
             $i = 1
@@ -165,51 +163,51 @@ function Monitorar-Processos {
                 Write-Host "$i. $user"
                 $i++
             }
-            Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+            Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
             Write-Host ""
             
-            $num_user = Read-Host "Digite o número do usuário para ver seus processos"
+            $num_user = Read-Host "Digite o numero do usuario para ver seus processos"
             
             if ($num_user -match '^\d+$') {
                 $usuario_sistema = ($usuarios[$num_user - 1] -split ':')[0]
                 if ($usuario_sistema) {
                     Write-Host ""
-                    Write-Host "👤 Processos do usuário '$usuario_sistema' (no sistema real):" -ForegroundColor Cyan
-                    Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+                    Write-Host "Processos do usuario '$usuario_sistema' (no sistema real):" -ForegroundColor Cyan
+                    Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
                     Get-Process -IncludeUserName | Where-Object { $_.UserName -like "*$usuario_sistema*" } | Format-Table -AutoSize
-                    Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+                    Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
                 }
             }
         }
         "8" { return }
-        default { Write-Mensagem -tipo "ERRO" -texto "Opção inválida!" }
+        default { Write-Mensagem -tipo "ERRO" -texto "Opcao invalida!" }
     }
     
     Write-Host ""
     Read-Host "Pressione ENTER para continuar"
 }
 
-# ========== FUNÇÃO PARA LISTAR TODOS OS USUÁRIOS ==========
+# ========== FUNCAO PARA LISTAR TODOS OS USUARIOS ==========
 function Listar-Usuarios {
     Clear-Host
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "                      LISTA DE USUÁRIOS                    " -ForegroundColor Green
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
+    Write-Host "                      LISTA DE USUARIOS                    " -ForegroundColor Green
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
     
     if ((Get-Content $USERS_FILE).Count -eq 0) {
-        Write-Mensagem -tipo "AVISO" -texto "Nenhum usuário cadastrado!"
+        Write-Mensagem -tipo "AVISO" -texto "Nenhum usuario cadastrado!"
         Write-Host ""
         Read-Host "Pressione ENTER para continuar"
         return
     }
     
     $total = (Get-Content $USERS_FILE).Count
-    Write-Host "📊 Total de usuários: $total" -ForegroundColor Cyan
+    Write-Host "Total de usuarios: $total" -ForegroundColor Cyan
     Write-Host ""
     
-    Write-Host "Nº  USUÁRIO          NOME COMPLETO               SHELL        STATUS" -ForegroundColor Green
-    Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+    Write-Host "N   USUARIO          NOME COMPLETO               SHELL        STATUS" -ForegroundColor Green
+    Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
     
     $num = 1
     foreach ($linha in Get-Content $USERS_FILE) {
@@ -232,24 +230,24 @@ function Listar-Usuarios {
         $num++
     }
     
-    Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+    Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
     Write-Host ""
     
-    $escolha = Read-Host "Digite o número do usuário para ver detalhes (0 para voltar)"
+    $escolha = Read-Host "Digite o numero do usuario para ver detalhes (0 para voltar)"
     
     if ($escolha -gt 0) {
         Ver-DetalhesUsuario -num $escolha
     }
 }
 
-# ========== FUNÇÃO PARA VER DETALHES DE UM USUÁRIO ==========
+# ========== FUNCAO PARA VER DETALHES DE UM USUARIO ==========
 function Ver-DetalhesUsuario {
     param($num)
     
     $linha = (Get-Content $USERS_FILE)[$num - 1]
     
     if (-not $linha) {
-        Write-Mensagem -tipo "ERRO" -texto "Usuário não encontrado!"
+        Write-Mensagem -tipo "ERRO" -texto "Usuario nao encontrado!"
         Read-Host "Pressione ENTER para continuar"
         return
     }
@@ -261,25 +259,25 @@ function Ver-DetalhesUsuario {
     $status = $campos[3]
     
     Clear-Host
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "                   DETALHES DO USUÁRIO                     " -ForegroundColor Green
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
+    Write-Host "                   DETALHES DO USUARIO                     " -ForegroundColor Green
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "📋 Informações:" -ForegroundColor Cyan
-    Write-Host "   Usuário: $user"
+    Write-Host "Informacoes:" -ForegroundColor Cyan
+    Write-Host "   Usuario: $user"
     Write-Host "   Nome completo: $name"
     Write-Host "   Shell: $shell"
     Write-Host "   Status: $(if ($status -eq 'ativo') { 'ATIVO' } else { 'BLOQUEADO' })"
     Write-Host ""
-    Write-Host "📁 Diretório home simulado: C:\Users\$user" -ForegroundColor Cyan
-    Write-Host "🆔 UID simulado: $((1000 + $num))" -ForegroundColor Cyan
+    Write-Host "Diretorio home simulado: C:\Users\$user" -ForegroundColor Cyan
+    Write-Host "UID simulado: $((1000 + $num))" -ForegroundColor Cyan
     Write-Host ""
     
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
     Read-Host "Pressione ENTER para continuar"
 }
 
-# ========== FUNÇÃO PARA PERGUNTAR SIM/NÃO ==========
+# ========== FUNCAO PARA PERGUNTAR SIM/NAO ==========
 function Confirmar-Acao {
     param($pergunta)
     
@@ -293,48 +291,45 @@ function Confirmar-Acao {
     }
 }
 
-# ========== FUNÇÃO PARA CRIAR USUÁRIO ==========
+# ========== FUNCAO PARA CRIAR USUARIO ==========
 function Criar-Usuario {
     Clear-Host
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "                     CRIAR USUÁRIO                        " -ForegroundColor Green
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
+    Write-Host "                     CRIAR USUARIO                        " -ForegroundColor Green
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
     
-    Write-Host "📋 REGRAS:" -ForegroundColor Cyan
-    Write-Host "   - Login: letras minúsculas (a-z), números, _ e -"
-    Write-Host "   - Login deve começar com letra"
+    Write-Host "REGRAS:" -ForegroundColor Cyan
+    Write-Host "   - Login: letras minusculas (a-z), numeros, _ e -"
+    Write-Host "   - Login deve comecar com letra"
     Write-Host "   - Exemplos: joao, maria_silva, user123"
     Write-Host ""
     
-    # Nome de usuário
     while ($true) {
-        $login = Read-Host "Login do usuário"
+        $login = Read-Host "Login do usuario"
         $login = $login.ToLower()
         
         if ($login -notmatch '^[a-z][a-z0-9_-]*$') {
-            Write-Mensagem -tipo "ERRO" -texto "Login inválido! Use apenas letras minúsculas, números, _ e -"
+            Write-Mensagem -tipo "ERRO" -texto "Login invalido! Use apenas letras minusculas, numeros, _ e -"
             continue
         }
         
-        if ((Get-Content $USERS_FILE) -match "^$login:") {
-            Write-Mensagem -tipo "ERRO" -texto "Usuário '$login' já existe!"
+        if ((Get-Content $USERS_FILE) -match "^$login") {
+            Write-Mensagem -tipo "ERRO" -texto "Usuario '$login' ja existe!"
             continue
         }
         break
     }
     
-    # Nome completo
     $nome_completo = Read-Host "Nome completo"
     if (-not $nome_completo) { $nome_completo = $login }
     
-    # Shell
     Write-Host ""
-    Write-Host "Shell disponíveis:" -ForegroundColor Cyan
+    Write-Host "Shell disponiveis:" -ForegroundColor Cyan
     Write-Host "   1. powershell.exe"
     Write-Host "   2. cmd.exe"
     Write-Host "   3. bash.exe (WSL)"
-    $shell_opcao = Read-Host "Escolha o shell (1-3) [padrão=1]"
+    $shell_opcao = Read-Host "Escolha o shell (1-3) [padrao=1]"
     
     switch ($shell_opcao) {
         "2" { $shell = "cmd.exe" }
@@ -342,7 +337,6 @@ function Criar-Usuario {
         default { $shell = "powershell.exe" }
     }
     
-    # Senha
     Write-Host ""
     while ($true) {
         $senha = Read-Host "Senha" -AsSecureString
@@ -352,54 +346,50 @@ function Criar-Usuario {
         $senha2_texto = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($senha2))
         
         if ($senha_texto -ne $senha2_texto) {
-            Write-Mensagem -tipo "ERRO" -texto "Senhas não conferem!"
+            Write-Mensagem -tipo "ERRO" -texto "Senhas nao conferem!"
         } elseif ($senha_texto.Length -lt 4) {
-            Write-Mensagem -tipo "ERRO" -texto "Senha muito curta (mínimo 4 caracteres)"
+            Write-Mensagem -tipo "ERRO" -texto "Senha muito curta (minimo 4 caracteres)"
         } else {
             break
         }
     }
     
-    # Confirmar
     Write-Host ""
-    Write-Host "📝 Resumo:" -ForegroundColor Cyan
+    Write-Host "Resumo:" -ForegroundColor Cyan
     Write-Host "   Login: $login"
     Write-Host "   Nome: $nome_completo"
     Write-Host "   Shell: $shell"
     Write-Host ""
     
-    if (Confirmar-Acao "Confirmar criação do usuário?") {
-        # Adiciona ao arquivo
-        "$login:$nome_completo:$shell:ativo" | Out-File -FilePath $USERS_FILE -Append
-        Write-Mensagem -tipo "SUCESSO" -texto "Usuário '$login' criado com sucesso!"
+    if (Confirmar-Acao "Confirmar criacao do usuario?") {
+        "$login`:$nome_completo`:$shell`:ativo" | Out-File -FilePath $USERS_FILE -Append -Encoding UTF8
+        Write-Mensagem -tipo "SUCESSO" -texto "Usuario '$login' criado com sucesso!"
         
-        # Salva senha em arquivo separado
-        "$login:$senha_texto" | Out-File -FilePath "$env:USERPROFILE\.script_senhas.txt" -Append
+        "$login`:$senha_texto" | Out-File -FilePath "$env:USERPROFILE\.script_senhas.txt" -Append -Encoding UTF8
     }
     
     Write-Host ""
     Read-Host "Pressione ENTER para continuar"
 }
 
-# ========== FUNÇÃO PARA EDITAR USUÁRIO ==========
+# ========== FUNCAO PARA EDITAR USUARIO ==========
 function Editar-Usuario {
     Clear-Host
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "                     EDITAR USUÁRIO                       " -ForegroundColor Green
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
+    Write-Host "                     EDITAR USUARIO                       " -ForegroundColor Green
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
     
     if ((Get-Content $USERS_FILE).Count -eq 0) {
-        Write-Mensagem -tipo "AVISO" -texto "Nenhum usuário cadastrado!"
+        Write-Mensagem -tipo "AVISO" -texto "Nenhum usuario cadastrado!"
         Read-Host "Pressione ENTER para continuar"
         return
     }
     
-    # Mostrar lista
-    Write-Host "📋 USUÁRIOS CADASTRADOS:" -ForegroundColor Cyan
-    Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
-    Write-Host "Nº  LOGIN            NOME" -ForegroundColor Green
-    Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+    Write-Host "USUARIOS CADASTRADOS:" -ForegroundColor Cyan
+    Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
+    Write-Host "N   LOGIN            NOME" -ForegroundColor Green
+    Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
     
     $usuarios = Get-Content $USERS_FILE
     $num = 1
@@ -411,22 +401,22 @@ function Editar-Usuario {
         $num++
     }
     
-    Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+    Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
     Write-Host ""
     
-    $escolha = Read-Host "Digite o número do usuário para editar (0 para voltar)"
+    $escolha = Read-Host "Digite o numero do usuario para editar (0 para voltar)"
     
     if ($escolha -eq 0) { return }
     
     if ($escolha -notmatch '^\d+$') {
-        Write-Mensagem -tipo "ERRO" -texto "Número inválido!"
+        Write-Mensagem -tipo "ERRO" -texto "Numero invalido!"
         Read-Host "Pressione ENTER para continuar"
         return
     }
     
     $linha = $usuarios[$escolha - 1]
     if (-not $linha) {
-        Write-Mensagem -tipo "ERRO" -texto "Usuário não encontrado!"
+        Write-Mensagem -tipo "ERRO" -texto "Usuario nao encontrado!"
         Read-Host "Pressione ENTER para continuar"
         return
     }
@@ -438,9 +428,9 @@ function Editar-Usuario {
     $old_status = $campos[3]
     
     Clear-Host
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "              EDITANDO USUÁRIO: $old_user                 " -ForegroundColor Green
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
+    Write-Host "              EDITANDO USUARIO: $old_user                 " -ForegroundColor Green
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
     
     Write-Host "O que deseja editar?" -ForegroundColor Cyan
@@ -470,10 +460,10 @@ function Editar-Usuario {
         "3" {
             if ($old_status -eq "ativo") {
                 $old_status = "bloqueado"
-                Write-Mensagem -tipo "INFO" -texto "Usuário será BLOQUEADO"
+                Write-Mensagem -tipo "INFO" -texto "Usuario sera BLOQUEADO"
             } else {
                 $old_status = "ativo"
-                Write-Mensagem -tipo "INFO" -texto "Usuário será ATIVADO"
+                Write-Mensagem -tipo "INFO" -texto "Usuario sera ATIVADO"
             }
         }
         "4" {
@@ -485,57 +475,55 @@ function Editar-Usuario {
                 $confirma_senha_texto = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($confirma_senha))
                 
                 if ($nova_senha_texto -ne $confirma_senha_texto) {
-                    Write-Mensagem -tipo "ERRO" -texto "Senhas não conferem!"
+                    Write-Mensagem -tipo "ERRO" -texto "Senhas nao conferem!"
                 } elseif ($nova_senha_texto.Length -lt 4) {
                     Write-Mensagem -tipo "ERRO" -texto "Senha muito curta!"
                 } else {
                     $senhas_file = "$env:USERPROFILE\.script_senhas.txt"
                     if (Test-Path $senhas_file) {
-                        $conteudo = Get-Content $senhas_file | Where-Object { $_ -notmatch "^$old_user:" }
-                        $conteudo | Set-Content $senhas_file
+                        $conteudo = Get-Content $senhas_file | Where-Object { $_ -notmatch "^$old_user" }
+                        $conteudo | Set-Content $senhas_file -Encoding UTF8
                     }
-                    "$old_user:$nova_senha_texto" | Out-File -FilePath $senhas_file -Append
+                    "$old_user`:$nova_senha_texto" | Out-File -FilePath $senhas_file -Append -Encoding UTF8
                     Write-Mensagem -tipo "SUCESSO" -texto "Senha alterada!"
                     break
                 }
             }
         }
         "5" { return }
-        default { Write-Mensagem -tipo "ERRO" -texto "Opção inválida!" }
+        default { Write-Mensagem -tipo "ERRO" -texto "Opcao invalida!" }
     }
     
-    # Salvar alterações
     if ($opcao -ge 1 -and $opcao -le 3) {
-        $novaLinha = "$old_user:$old_name:$old_shell:$old_status"
+        $novaLinha = "$old_user`:$old_name`:$old_shell`:$old_status"
         $conteudo = Get-Content $USERS_FILE
         $conteudo[$escolha - 1] = $novaLinha
-        $conteudo | Set-Content $USERS_FILE
-        Write-Mensagem -tipo "SUCESSO" -texto "Usuário atualizado com sucesso!"
+        $conteudo | Set-Content $USERS_FILE -Encoding UTF8
+        Write-Mensagem -tipo "SUCESSO" -texto "Usuario atualizado com sucesso!"
     }
     
     Write-Host ""
     Read-Host "Pressione ENTER para continuar"
 }
 
-# ========== FUNÇÃO PARA DELETAR USUÁRIO ==========
+# ========== FUNCAO PARA DELETAR USUARIO ==========
 function Deletar-Usuario {
     Clear-Host
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "                    DELETAR USUÁRIO                     " -ForegroundColor Red
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
+    Write-Host "                    DELETAR USUARIO                     " -ForegroundColor Red
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
     
     if ((Get-Content $USERS_FILE).Count -eq 0) {
-        Write-Mensagem -tipo "AVISO" -texto "Nenhum usuário cadastrado!"
+        Write-Mensagem -tipo "AVISO" -texto "Nenhum usuario cadastrado!"
         Read-Host "Pressione ENTER para continuar"
         return
     }
     
-    # Mostrar lista
-    Write-Host "📋 USUÁRIOS CADASTRADOS:" -ForegroundColor Cyan
-    Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
-    Write-Host "Nº  LOGIN            NOME                         STATUS" -ForegroundColor Green
-    Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+    Write-Host "USUARIOS CADASTRADOS:" -ForegroundColor Cyan
+    Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
+    Write-Host "N   LOGIN            NOME                         STATUS" -ForegroundColor Green
+    Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
     
     $usuarios = Get-Content $USERS_FILE
     $num = 1
@@ -548,22 +536,22 @@ function Deletar-Usuario {
         $num++
     }
     
-    Write-Host "─────────────────────────────────────────────────────────────────" -ForegroundColor Yellow
+    Write-Host "------------------------------------------------------------" -ForegroundColor Yellow
     Write-Host ""
     
-    $escolha = Read-Host "Digite o número do usuário para DELETAR (0 para voltar)"
+    $escolha = Read-Host "Digite o numero do usuario para DELETAR (0 para voltar)"
     
     if ($escolha -eq 0) { return }
     
     if ($escolha -notmatch '^\d+$') {
-        Write-Mensagem -tipo "ERRO" -texto "Número inválido!"
+        Write-Mensagem -tipo "ERRO" -texto "Numero invalido!"
         Read-Host "Pressione ENTER para continuar"
         return
     }
     
     $linha = $usuarios[$escolha - 1]
     if (-not $linha) {
-        Write-Mensagem -tipo "ERRO" -texto "Usuário não encontrado!"
+        Write-Mensagem -tipo "ERRO" -texto "Usuario nao encontrado!"
         Read-Host "Pressione ENTER para continuar"
         return
     }
@@ -574,80 +562,79 @@ function Deletar-Usuario {
     $status = $campos[3]
     
     Write-Host ""
-    Write-Host "⚠️  ATENÇÃO: Você está prestes a DELETAR o usuário '$user'" -ForegroundColor Red
+    Write-Host "ATENCAO: Voce esta prestes a DELETAR o usuario '$user'" -ForegroundColor Red
     Write-Host "   Nome: $name" -ForegroundColor Cyan
     Write-Host "   Status: $status" -ForegroundColor Cyan
     Write-Host ""
     
-    if (Confirmar-Acao "Tem certeza que deseja DELETAR este usuário?") {
+    if (Confirmar-Acao "Tem certeza que deseja DELETAR este usuario?") {
         $conteudo = Get-Content $USERS_FILE
         $conteudo = $conteudo[0..($escolha-2)] + $conteudo[$escolha..($conteudo.Length-1)]
-        $conteudo | Set-Content $USERS_FILE
+        $conteudo | Set-Content $USERS_FILE -Encoding UTF8
         
-        # Remover senha
         $senhas_file = "$env:USERPROFILE\.script_senhas.txt"
         if (Test-Path $senhas_file) {
-            $conteudo_senhas = Get-Content $senhas_file | Where-Object { $_ -notmatch "^$user:" }
-            $conteudo_senhas | Set-Content $senhas_file
+            $conteudo_senhas = Get-Content $senhas_file | Where-Object { $_ -notmatch "^$user" }
+            $conteudo_senhas | Set-Content $senhas_file -Encoding UTF8
         }
         
-        Write-Mensagem -tipo "SUCESSO" -texto "Usuário '$user' foi DELETADO com sucesso!"
+        Write-Mensagem -tipo "SUCESSO" -texto "Usuario '$user' foi DELETADO com sucesso!"
     } else {
-        Write-Mensagem -tipo "INFO" -texto "Operação cancelada"
+        Write-Mensagem -tipo "INFO" -texto "Operacao cancelada"
     }
     
     Write-Host ""
     Read-Host "Pressione ENTER para continuar"
 }
 
-# ========== INFORMAÇÕES DO SISTEMA ==========
+# ========== INFORMACOES DO SISTEMA ==========
 function Info-Sistema {
     Clear-Host
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "                   INFORMAÇÕES DO SISTEMA                 " -ForegroundColor Green
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
+    Write-Host "                   INFORMACOES DO SISTEMA                 " -ForegroundColor Green
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
     
-    Write-Host "📅 Data/Hora:      $(Get-Date)" -ForegroundColor Cyan
-    Write-Host "💻 Computador:     $env:COMPUTERNAME" -ForegroundColor Cyan
-    Write-Host "👤 Usuário:        $env:USERNAME" -ForegroundColor Cyan
-    Write-Host "📁 Diretório:      $(Get-Location)" -ForegroundColor Cyan
+    Write-Host "Data/Hora:      $(Get-Date)" -ForegroundColor Cyan
+    Write-Host "Computador:     $env:COMPUTERNAME" -ForegroundColor Cyan
+    Write-Host "Usuario:        $env:USERNAME" -ForegroundColor Cyan
+    Write-Host "Diretorio:      $(Get-Location)" -ForegroundColor Cyan
     Write-Host ""
     
-    Write-Host "🐧 Sistema:        Windows $(Get-ComputerInfo | Select-Object -ExpandProperty WindowsProductName)" -ForegroundColor Cyan
-    Write-Host "⏱️  Atividade:      $(Get-Uptime)" -ForegroundColor Cyan
+    Write-Host "Sistema:        Windows" -ForegroundColor Cyan
+    Write-Host "Atividade:      $(Get-Uptime)" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "📊 Usuários logados:" -ForegroundColor Cyan
-    Get-Process -IncludeUserName | Select-Object UserName -Unique | ForEach-Object { Write-Host "   $($_.UserName)" }
+    Write-Host "Usuarios logados:" -ForegroundColor Cyan
+    quser 2>$null | ForEach-Object { Write-Host "   $_" }
     Write-Host ""
     
-    Write-Host "💾 Espaço em disco:" -ForegroundColor Cyan
+    Write-Host "Espaco em disco:" -ForegroundColor Cyan
     Get-PSDrive -Name C | ForEach-Object { Write-Host "   Usado: $([math]::Round($_.Used/1GB,2)) GB de $([math]::Round($_.Free/1GB,2)) GB livre" }
     Write-Host ""
     
-    Write-Host "👥 Usuários no script: $((Get-Content $USERS_FILE).Count) cadastrados" -ForegroundColor Cyan
-    Write-Host "🔄 Total de processos no sistema: $((Get-Process).Count)" -ForegroundColor Cyan
+    Write-Host "Usuarios no script: $((Get-Content $USERS_FILE).Count) cadastrados" -ForegroundColor Cyan
+    Write-Host "Total de processos no sistema: $((Get-Process).Count)" -ForegroundColor Cyan
     
     Write-Host ""
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
     Read-Host "Pressione ENTER para voltar"
 }
 
 # ========== CRIAR ARQUIVOS DE TESTE ==========
 function Criar-Arquivos {
     Clear-Host
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "                   CRIAÇÃO DE ARQUIVOS                    " -ForegroundColor Green
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
+    Write-Host "                   CRIACAO DE ARQUIVOS                    " -ForegroundColor Green
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
     
-    Write-Host "📁 Diretório atual: $(Get-Location)" -ForegroundColor Cyan
+    Write-Host "Diretorio atual: $(Get-Location)" -ForegroundColor Cyan
     Write-Host ""
     
     $qtd = Read-Host "Quantos arquivos?"
     
     if ($qtd -notmatch '^\d+$' -or $qtd -eq 0) {
-        Write-Mensagem -tipo "ERRO" -texto "Número inválido"
+        Write-Mensagem -tipo "ERRO" -texto "Numero invalido"
         Read-Host "Pressione ENTER para voltar"
         return
     }
@@ -661,7 +648,7 @@ function Criar-Arquivos {
     for ($i = 1; $i -le $qtd; $i++) {
         $nome = "${base}_$i.txt"
         "Arquivo criado em $(Get-Date) por $env:USERNAME" | Out-File -FilePath $nome
-        Write-Host "   ✅ $nome"
+        Write-Host "   OK: $nome"
     }
     
     Write-Mensagem -tipo "SUCESSO" -texto "$qtd arquivos criados"
@@ -670,7 +657,7 @@ function Criar-Arquivos {
     Read-Host "Pressione ENTER para voltar"
 }
 
-# ========== FUNÇÃO PARA OBTER UPTIME ==========
+# ========== FUNCAO PARA OBTER UPTIME ==========
 function Get-Uptime {
     $uptime = (Get-Date) - (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
     return "$($uptime.Days) dias, $($uptime.Hours) horas, $($uptime.Minutes) minutos"
@@ -679,52 +666,50 @@ function Get-Uptime {
 # ========== MENU PRINCIPAL ==========
 function Mostrar-Menu {
     Clear-Host
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host "              SISTEMA DE GERENCIAMENTO - WINDOWS               " -ForegroundColor Magenta
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host "Arquivo de dados: $USERS_FILE" -ForegroundColor Cyan
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "📌 MENU PRINCIPAL" -ForegroundColor Green
+    Write-Host "MENU PRINCIPAL" -ForegroundColor Green
     Write-Host ""
-    Write-Host "   1. 🖥️  Informações do sistema"
-    Write-Host "   2. 📁 Criar arquivos de teste"
-    Write-Host "   3. 🔄 Monitorar processos"
+    Write-Host "   1. Informacoes do sistema"
+    Write-Host "   2. Criar arquivos de teste"
+    Write-Host "   3. Monitorar processos"
     Write-Host ""
-    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
-    Write-Host "👥 GERENCIAMENTO DE USUÁRIOS " -ForegroundColor Green
-    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
+    Write-Host "------------------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "GERENCIAMENTO DE USUARIOS " -ForegroundColor Green
+    Write-Host "------------------------------------------------------------" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "   4. 📋 LISTAR todos os usuários (READ)"
-    Write-Host "   5. ➕ CRIAR novo usuário (CREATE)"
-    Write-Host "   6. ✏️  EDITAR usuário (UPDATE)"
-    Write-Host "   7. 🗑️  DELETAR usuário (DELETE)"
+    Write-Host "   4. LISTAR todos os usuarios (READ)"
+    Write-Host "   5. CRIAR novo usuario (CREATE)"
+    Write-Host "   6. EDITAR usuario (UPDATE)"
+    Write-Host "   7. DELETAR usuario (DELETE)"
     Write-Host ""
-    Write-Host "   8. 🚪 Sair"
+    Write-Host "   8. Sair"
     Write-Host ""
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
 }
 
-# ========== FUNÇÃO PRINCIPAL ==========
+# ========== FUNCAO PRINCIPAL ==========
 function Main {
-    # Inicializar arquivo de usuários
     Inicializar-Arquivo
     
-    # Tela de boas-vindas
     Clear-Host
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Green
-    Write-Host "         SISTEMA DE GERENCIAMENTO DE USUÁRIOS              " -ForegroundColor Green
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Green
+    Write-Host "============================================================" -ForegroundColor Green
+    Write-Host "         SISTEMA DE GERENCIAMENTO DE USUARIOS              " -ForegroundColor Green
+    Write-Host "============================================================" -ForegroundColor Green
     Write-Host ""
-    Write-Host "✅ Sistema 100% FUNCIONAL sem necessidade de admin" -ForegroundColor Cyan
-    Write-Host "✅ CRUD completo de usuários funcionando" -ForegroundColor Cyan
-    Write-Host "✅ Monitoramento de processos incluído" -ForegroundColor Cyan
-    Write-Host "✅ Dados salvos em: $USERS_FILE" -ForegroundColor Cyan
+    Write-Host "Sistema 100% FUNCIONAL sem necessidade de admin" -ForegroundColor Cyan
+    Write-Host "CRUD completo de usuarios funcionando" -ForegroundColor Cyan
+    Write-Host "Monitoramento de processos incluido" -ForegroundColor Cyan
+    Write-Host "Dados salvos em: $USERS_FILE" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "⚠️  Este é um sistema de simulação local" -ForegroundColor Yellow
-    Write-Host "   Os usuários são salvos em um arquivo local, não no sistema operacional" -ForegroundColor Yellow
+    Write-Host "Este e um sistema de simulacao local" -ForegroundColor Yellow
+    Write-Host "Os usuarios sao salvos em um arquivo local, nao no sistema operacional" -ForegroundColor Yellow
     Write-Host ""
-    Read-Host "Pressione ENTER para começar"
+    Read-Host "Pressione ENTER para comecar"
     
     while ($true) {
         Mostrar-Menu
@@ -740,20 +725,20 @@ function Main {
             "7" { Deletar-Usuario }
             "8" {
                 Clear-Host
-                Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Green
+                Write-Host "============================================================" -ForegroundColor Green
                 Write-Host "                    SCRIPT FINALIZADO                     " -ForegroundColor Green
-                Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Green
+                Write-Host "============================================================" -ForegroundColor Green
                 Write-Host ""
-                Write-Host "📊 RESUMO FINAL:" -ForegroundColor Cyan
-                Write-Host "   📁 Arquivo de usuários: $USERS_FILE"
-                Write-Host "   👥 Total de usuários: $((Get-Content $USERS_FILE).Count)"
-                Write-Host "   📝 Log: $LOG_FILE"
+                Write-Host "RESUMO FINAL:" -ForegroundColor Cyan
+                Write-Host "   Arquivo de usuarios: $USERS_FILE"
+                Write-Host "   Total de usuarios: $((Get-Content $USERS_FILE).Count)"
+                Write-Host "   Log: $LOG_FILE"
                 Write-Host ""
-                Write-Host "👋 Obrigado por usar o sistema!" -ForegroundColor Green
+                Write-Host "Obrigado por usar o sistema!" -ForegroundColor Green
                 exit 0
             }
             default {
-                Write-Mensagem -tipo "ERRO" -texto "Opção inválida! Digite 1-8"
+                Write-Mensagem -tipo "ERRO" -texto "Opcao invalida! Digite 1-8"
                 Start-Sleep -Seconds 1
             }
         }
