@@ -24,6 +24,10 @@ Script em PowerShell para gerenciamento de usuários e monitoramento de processo
 - 👥 Usuários logados no sistema
 - 🔄 Total de processos em execução
 
+## 📷 Tela do Sistema
+
+<img width="569" height="553" alt="Tela do Sistema de Gerenciamento" src="https://github.com/user-attachments/assets/87f59c9e-aacb-47c6-bc74-83bf538f9122" />
+
 ### Utilitários
 - 📁 Criação de arquivos de teste em massa
 
@@ -32,7 +36,6 @@ Script em PowerShell para gerenciamento de usuários e monitoramento de processo
 - **Windows 7/8/10/11** ou **Windows Server 2012+**
 - **PowerShell 5.1 ou superior** (já incluso no Windows 10/11)
 - Permissão para executar scripts PowerShell
-- Nenhuma necessidade de privilégios de administrador
 
 ## 💿 Instalação
 
